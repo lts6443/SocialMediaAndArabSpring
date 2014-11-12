@@ -65,16 +65,13 @@ if __name__ == "__main__":
         oauth = get_oauth()
         f = open("egypt_ids.csv",'r')
 	ids = ""
-	r = 1
+	r = 90
 	for i in range(r):
 		if i == r-1:
-        		ids += str(f.readline().split(',')[1])	
+        		ids += str(f.readline().split(',')[0])	
         	else:
-			ids += str(f.readline().split(',')[1])+','	
-	print ids
-        #r = requests.get(url="https://api.twitter.com/1.1/statuses/lookup.json?id=22643118444646400,22648223323656192,22700735934234625,22717768642072576,22718171173621760", auth=oauth)
+			ids += str(f.readline().split(',')[0])+','	
 	url = "https://api.twitter.com/1.1/statuses/lookup.json?id=" + ids.strip()
-	print url
         r = requests.get(url=url,  auth=oauth)
         print r.json()
 	#client = MongoClient("74.74.175.42",27017)
