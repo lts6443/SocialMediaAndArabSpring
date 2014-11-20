@@ -15,6 +15,6 @@ echo "done"
 echo $lineNumber
 lineNumber=`expr $lineNumber + 90`
 count=`expr $count + 1`
-sleep 15
+sleep 1
 done
 echo "]" >> tweets.json
