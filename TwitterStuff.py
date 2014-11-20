@@ -7,6 +7,7 @@ import requests
 from requests_oauthlib import OAuth1
 from urlparse import parse_qs
 from pymongo import MongoClient
+import sys
 
 REQUEST_TOKEN_URL = "https://api.twitter.com/oauth/request_token"
 AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize?oauth_token="
@@ -57,6 +58,14 @@ def get_oauth():
     return oauth
 
 if __name__ == "__main__":
+    if len(sys.argv) == 3:
+        count = int(sys.argv[1])
+        if sys.argv[2] == 'True':
+            lastRecord = True
+        else:
+            lastRecord = False
+    else:
+        print("You suck!")
     if not OAUTH_TOKEN:
         token, secret = setup_oauth()
         print "OAUTH_TOKEN: " + token
@@ -65,15 +74,20 @@ if __name__ == "__main__":
         oauth = get_oauth()
         f = open("egypt_ids.csv",'r')
 	ids = ""
-	r = 90
-	for i in range(r):
+	r = 1 
+        for i in range(count):
+            f.readline()
+	for i in enumerate(range(r)):
 		if i == r-1:
         		ids += str(f.readline().split(',')[0])	
         	else:
 			ids += str(f.readline().split(',')[0])+','	
 	url = "https://api.twitter.com/1.1/statuses/lookup.json?id=" + ids.strip()
         r = requests.get(url=url,  auth=oauth)
-        print r.json()
+  	if lastRecord:
+            print str(r.json())[1:-1]
+        else:
+            print str(r.json())[1:-1] + ','
 	#client = MongoClient("74.74.175.42",27017)
 	#db = client.test
 	#data = db.data	
