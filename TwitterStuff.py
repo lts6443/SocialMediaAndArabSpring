@@ -1,6 +1,5 @@
 #! /usr/bin/python
 
-# Get Twitter Data
 
 from __future__ import unicode_literals
 import requests
@@ -8,6 +7,7 @@ from requests_oauthlib import OAuth1
 from urlparse import parse_qs
 from pymongo import MongoClient
 import sys
+import re
 
 REQUEST_TOKEN_URL = "https://api.twitter.com/oauth/request_token"
 AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize?oauth_token="
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         oauth = get_oauth()
         f = open("egypt_ids.csv",'r')
 	ids = ""
-	r = 1 
+	r = 50 
         for i in range(count):
             f.readline()
 	for i in enumerate(range(r)):
@@ -84,11 +84,20 @@ if __name__ == "__main__":
 			ids += str(f.readline().split(',')[0])+','	
 	url = "https://api.twitter.com/1.1/statuses/lookup.json?id=" + ids.strip()
         r = requests.get(url=url,  auth=oauth)
-  	if lastRecord:
-            print str(r.json())[1:-1]
-        else:
-            print str(r.json())[1:-1] + ','
-	#client = MongoClient("74.74.175.42",27017)
-	#db = client.test
-	#data = db.data	
-	#data.insert(r.json())
+	json = r.json()
+	s = ""
+	for i,tweet in enumerate(json):
+		s += '{"text":"'
+		text = re.sub(r'"',r'',tweet["text"])
+		text = re.sub(r'(\r\n|\n)',r'',text)
+		s += text
+		s += '","created_at":"'
+		s += tweet["created_at"]
+		if lastRecord and i == len(json)-1:
+			s += '"}'
+		else:
+			s += '"},'	
+	try:
+		print s.encode('utf-8')
+	except UnicodeError:
+		pass
