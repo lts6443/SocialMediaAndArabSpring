@@ -1,0 +1,50 @@
+Tweets
+    _id: id - Note: This is the tweetID
+    contributors: contributors
+    text: text - Note: This is the full text of the tweet
+    parentTweet: in_reply_to_status_id
+    parentUser: in_reply_to_user_id
+    favorites: favorite_count
+    source: source - Note: must be parsed
+    coordinates: coordinates
+    userID: user.id
+    followers: user.followers_count
+    friends: user.friends_count
+    location: user.location
+    timestamp: created_at - Note: Convert to ISO 8601 format GMT
+
+Users
+    _id - user.id
+    tweets:
+        id: id - Note: This is the tweetID
+        timestamp: created_at - Note: Convert to ISO 8601 format GMT
+
+Words
+    _id: Text of word - Note: Extracted from text of tweet.
+    tweets:
+        id: id - Note: This is the tweetID
+        timestamp: created_at - Note: Convert to ISO 8601 format GMT
+
+Hashtags
+    _id: entities.hashtags.text
+    tweets:
+        id - Note: This is the tweetID
+        timestamp: created_at - Note: Convert to ISO 8601 format GMT
+
+Links
+    _id: entities.urls - Note: 'indexed' by domain via regex
+    tweets:
+        id - Note: This is the tweetID
+        timestamp: created_at - Note: Convert to ISO 8601 format GMT
+
+Locations
+    _id: user.location
+    tweets:
+        id - Note: This is the tweetID
+        timestamp: created_at - Note: Convert to ISO 8601 format GMT
+
+GPS
+    _id: coordinates
+    tweets:
+        id - Note: This is the tweetID
+        timestamp: created_at - Note: Convert to ISO 8601 format GMT
